@@ -148,11 +148,8 @@ public class GameUpdated {
 			System.out.println(I + ", " + J);
 
 			board = checkPitsPossibility(board);
-			//
-			// if (board[I][J].equals("G"))
-			// break;
 
-			if (it == 10)
+			if (it == 50)
 				break;
 
 			if (board[I][J].equals("N")) {
@@ -188,17 +185,18 @@ public class GameUpdated {
 					else {
 						if (!safeWumpus[tx][ty].equals("safe"))
 							safeWumpus[tx][ty] = "dk";
-					}
-					// System.out.println("wum: "+tx + ", "+ ty +": "+safeWumpus[tx][ty]);
-					// System.out.println("pit: "+tx + ", "+ ty +": "+safePits[tx][ty]);
+					}				
 
 				}
 			}
+			
+			///
 
 			for (int ii = 0; ii < 4; ii++) {
 				int tx = I + fx[ii];
 				int ty = J + fy[ii];
 				boolean isValidCell = adjacentCellValid(tx, ty);
+				
 				if (isValidCell && !visited[tx][ty] && safePits[tx][ty].equals("safe")
 						&& safeWumpus[tx][ty].equals("safe")) {
 
@@ -210,9 +208,9 @@ public class GameUpdated {
 
 					visited[I][J] = true;
 					isAnyWay = true;
-					
+					System.out.println("..");
 					break;
-				} else if (isValidCell && (!safePits[tx][ty].equals("safe") && !safeWumpus[tx][ty].equals("safe"))) {
+				} else if (isValidCell && (!safePits[tx][ty].equals("safe") || !safeWumpus[tx][ty].equals("safe"))) {
 					
 					isAnyWay = false;
 				}
@@ -222,7 +220,7 @@ public class GameUpdated {
 			}
 
 			if (!isAnyWay) {
-				System.out.println("...");
+				
 				I = parentI;
 				J = parentJ;
 			}
