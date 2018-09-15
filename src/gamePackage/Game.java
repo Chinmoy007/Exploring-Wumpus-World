@@ -13,9 +13,6 @@ public class Game {
 	private int sourceI;
 	private int sourceJ;
 
-	// private int fx[] = { +0, +0, +1, -1, -1, +1, -1, +1 };
-	// private int fy[] = { -1, +1, +0, +0, +1, +1, -1, -1 };
-
 	int fx[] = { 1, -1, 0, 0 };
 	int fy[] = { 0, 0, 1, -1 };
 
@@ -65,11 +62,11 @@ public class Game {
 		board[sourceI][sourceJ] = "S";
 		board[boardRow / 2][boardCol / 2] = "G";
 
-		for (int pitN = 0; pitN < 7; pitN++) {
+		for (int pitN = 0; pitN < 2; pitN++) {
 			tempPos = getElementsPosition(board);
 			board[tempPos.row][tempPos.col] = "P";
 		}
-		for (int wumN = 0; wumN < 3; wumN++) {
+		for (int wumN = 0; wumN < 1; wumN++) {
 			tempPos = getElementsPosition(board);
 			board[tempPos.row][tempPos.col] = "W";
 		}

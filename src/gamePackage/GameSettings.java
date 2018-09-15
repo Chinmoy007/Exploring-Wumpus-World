@@ -10,8 +10,8 @@ public class GameSettings {
 	public static int loacationX = 100;
 	public static int locationY = 50;
 	
-	public static int BOARD_ROW = 10;
-	public static int BOARD_COL = 10;
+	public static int BOARD_ROW = 5;
+	public static int BOARD_COL = 5;
 	
 	public static int sourceI = BOARD_ROW-1;
 	public static int sourceJ = 0;

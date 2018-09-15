@@ -26,7 +26,7 @@ public class GameUpdated {
 		init();
 		makeBoard();
 		printBoard(board);
-		start();
+		start2();
 		// temp();
 	}
 
@@ -49,7 +49,7 @@ public class GameUpdated {
 
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
-				board[i][j] = "N";
+				board[i][j] = "E";
 
 				pits[i][j] = true;
 				wumpus[i][j] = true;
@@ -64,6 +64,7 @@ public class GameUpdated {
 		board[0][2] = "P";
 		board[3][2] = "P";
 		board[2][4] = "P";
+		
 
 		board[2][0] = "W";
 
@@ -75,7 +76,7 @@ public class GameUpdated {
 	private String[][] setBGS(String board[][]) {
 		for (int ii = 0; ii < boardSize; ii++) {
 			for (int jj = 0; jj < boardSize; jj++) {
-				String cellCH = "N";
+				String cellCH = "E";
 				if (board[ii][jj].equals("P")) {
 					cellCH = "B";
 				} else if (board[ii][jj].equals("W")) {
@@ -85,10 +86,10 @@ public class GameUpdated {
 					int tx = ii + fx[k];
 					int ty = jj + fy[k];
 
-					if (adjacentCellValid(tx, ty) && !cellCH.equals("N")
+					if (adjacentCellValid(tx, ty) && !cellCH.equals("E")
 							&& !(board[tx][ty].equals("G") || board[tx][ty].equals("W") || board[tx][ty].equals("P"))) {
 
-						if (board[tx][ty].equals("N"))
+						if (board[tx][ty].equals("E"))
 							board[tx][ty] = "";
 						if (!board[tx][ty].contains(cellCH))
 							board[tx][ty] += cellCH;
@@ -132,19 +133,16 @@ public class GameUpdated {
 
 		int it = 0;
 
-		boolean hasRisk = false;
-
-		boolean game = true;
-
 		safePits[I][J] = "safe";
 		safeWumpus[I][J] = "safe";
 
 		while (true) {
 
 			boolean isAnyWay = true;
-			boolean negOfLhs;
+
 			boolean negOfPit = false;
 			boolean negOfWumpus = false;
+
 			System.out.println(I + ", " + J);
 
 			board = checkPitsPossibility(board);
@@ -162,6 +160,7 @@ public class GameUpdated {
 				negOfPit = true;
 				negOfWumpus = false;
 			}
+
 			for (int ii = 0; ii < 4; ii++) {
 
 				int tx = I + fx[ii];
@@ -185,18 +184,18 @@ public class GameUpdated {
 					else {
 						if (!safeWumpus[tx][ty].equals("safe"))
 							safeWumpus[tx][ty] = "dk";
-					}				
+					}
 
 				}
 			}
-			
+
 			///
 
 			for (int ii = 0; ii < 4; ii++) {
 				int tx = I + fx[ii];
 				int ty = J + fy[ii];
 				boolean isValidCell = adjacentCellValid(tx, ty);
-				
+
 				if (isValidCell && !visited[tx][ty] && safePits[tx][ty].equals("safe")
 						&& safeWumpus[tx][ty].equals("safe")) {
 
@@ -211,7 +210,7 @@ public class GameUpdated {
 					System.out.println("..");
 					break;
 				} else if (isValidCell && (!safePits[tx][ty].equals("safe") || !safeWumpus[tx][ty].equals("safe"))) {
-					
+
 					isAnyWay = false;
 				}
 			}
@@ -220,7 +219,130 @@ public class GameUpdated {
 			}
 
 			if (!isAnyWay) {
-				
+
+				I = parentI;
+				J = parentJ;
+			}
+
+			it++;
+		}
+	}
+
+	private void setSafeCellSituation(int tx, int ty, boolean entailedRes, boolean isPitType) {
+		if (isPitType) {
+			if (entailedRes)
+				safePits[tx][ty] = "safe";
+			else {
+				if (!safePits[tx][ty].equals("safe"))
+					safePits[tx][ty] = "dk";
+			}
+		} else {
+			if (entailedRes)
+				safeWumpus[tx][ty] = "safe";
+			else {
+				if (!safeWumpus[tx][ty].equals("safe"))
+					safeWumpus[tx][ty] = "dk";
+			}
+		}
+	}
+
+	private void setAllAdjacentCellSituation(int I, int J) {
+
+		boolean negOfPit = false;
+		boolean negOfWumpus = false;
+
+		if (board[I][J].equals("E")) {
+			negOfPit = true;
+			negOfWumpus = true;
+		} 
+		else if (board[I][J].equals("B")) {
+			negOfPit = false;
+			negOfWumpus = true;
+		} 
+		else if (board[I][J].equals("S")) {
+			negOfPit = true;
+			negOfWumpus = false;
+		}
+		else if (board[I][J].equals("BS")) {
+			negOfPit = false;
+			negOfWumpus = false;
+		}
+
+		for (int ii = 0; ii < 4; ii++) {
+
+			int tx = I + fx[ii];
+			int ty = J + fy[ii];
+			boolean isValidCell = adjacentCellValid(tx, ty);
+
+			if (isValidCell) {
+
+				boolean entailPit = entail(I, J, true, negOfPit, pits[tx][ty], true);
+				boolean entailWumpus = entail(I, J, true, negOfWumpus, wumpus[tx][ty], false);
+
+				setSafeCellSituation(tx, ty, entailPit, true);
+				setSafeCellSituation(tx, ty, entailWumpus, false);
+
+			}
+		}
+	}
+
+	private void start2() {
+		int startI = 0;
+		int startJ = 0;
+
+		int I = startI;
+		int J = startJ;
+
+		int parentI = I;
+		int parentJ = J;
+
+		int it = 0;
+
+		safePits[I][J] = "safe";
+		safeWumpus[I][J] = "safe";
+
+		while (true) {
+
+			boolean isAnyWay = true;
+
+			System.out.println(I + ", " + J);
+
+			board = checkPitsPossibility(board);
+
+			if (it == 50)
+				break;
+
+			setAllAdjacentCellSituation(I, J);
+
+			for (int ii = 0; ii < 4; ii++) {
+				int tx = I + fx[ii];
+				int ty = J + fy[ii];
+				boolean isValidCell = adjacentCellValid(tx, ty);
+
+				if (isValidCell && !visited[tx][ty] && safePits[tx][ty].equals("safe")
+						&& safeWumpus[tx][ty].equals("safe")) {
+
+					parentI = I;
+					parentJ = J;
+
+					I = tx;
+					J = ty;
+
+					visited[I][J] = true;
+					isAnyWay = true;
+					System.out.println("..");
+					break;
+				} else if (isValidCell && (!safePits[tx][ty].equals("safe") || !safeWumpus[tx][ty].equals("safe"))) {
+
+					isAnyWay = false;
+				}
+			}
+			if (I == parentI && J == parentJ) {
+				break;
+			}
+
+			if (!isAnyWay) {
+
 				I = parentI;
 				J = parentJ;
 			}

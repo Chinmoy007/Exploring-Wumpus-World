@@ -128,8 +128,8 @@ public class GameGraphics implements Runnable {
 		}
 	}
 
-	private void play() {
-		// --
+	private void play(Graphics g) {
+		
 	}
 
 	private void render() {
@@ -144,6 +144,9 @@ public class GameGraphics implements Runnable {
 		g.clearRect(0, 0, width, height);
 		drawBoard(g);
 		drawElement(g);
+		
+		if (!isGameEnd)
+			play(g);
 
 		buffer.show();
 		g.dispose();
@@ -158,8 +161,7 @@ public class GameGraphics implements Runnable {
 
 		while (true) {
 			render();
-			if (!isGameEnd)
-				play();
+			
 		}
 	}
 
