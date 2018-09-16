@@ -2,8 +2,6 @@ package temporary;
 
 import java.util.ArrayList;
 
-import gamePackage.GameSettings;
-
 public class GameUpdated {
 	private String[][] board;
 

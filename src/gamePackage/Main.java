@@ -3,7 +3,7 @@ package gamePackage;
 public class Main {
 
 	public static void main(String[] args) {
-//		new GameGraphics().start();
+		new GameGraphics().start();
 	}
 
 }

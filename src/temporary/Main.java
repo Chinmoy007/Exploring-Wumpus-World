@@ -2,7 +2,7 @@ package temporary;
 public class Main {
 
 	public static void main(String[] args) {
-		new GameUpdated();
+//		new GameUpdated();
 //		boolean b11 = true;
 //		boolean b12 = true;
 //		boolean p13 = true;
